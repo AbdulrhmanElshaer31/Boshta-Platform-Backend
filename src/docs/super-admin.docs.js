@@ -2137,3 +2137,1024 @@
  *         schema: { type: integer }
  *     responses: { 200: { description: Template status toggled } }
  */
+/* ============================================
+   BULK UPLOAD ENDPOINTS
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/students/template:
+ *   get:
+ *     summary: Download students Excel template
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     responses:
+ *       200:
+ *         description: Template downloaded successfully
+ *         content:
+ *           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+ *             schema:
+ *               type: string
+ *               format: binary
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/students/bulk-upload:
+ *   post:
+ *     summary: Bulk upload students
+ *     description: Upload Excel file to add multiple students
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [file]
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: File processed successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/grades/template:
+ *   get:
+ *     summary: Download grades Excel template
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     responses:
+ *       200:
+ *         description: Template downloaded successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/grades/bulk-upload:
+ *   post:
+ *     summary: Bulk upload grades
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [file]
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: File processed successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/groups/template:
+ *   get:
+ *     summary: Download groups Excel template
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     responses:
+ *       200:
+ *         description: Template downloaded successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/groups/bulk-upload:
+ *   post:
+ *     summary: Bulk upload groups
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [file]
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: File processed successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/template:
+ *   get:
+ *     summary: Download exam results Excel template
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     responses:
+ *       200:
+ *         description: Template downloaded successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/bulk-upload/{examId}:
+ *   post:
+ *     summary: Bulk upload exam results
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [file]
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: File processed successfully
+ *//* ============================================
+   ACTIVITY LOG
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/activity-log:
+ *   get:
+ *     summary: Get activity log
+ *     description: Get all activity logs with filters
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: query
+ *         name: entity_type
+ *         schema: { type: string }
+ *       - in: query
+ *         name: date
+ *         schema: { type: string, format: date }
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 1 }
+ *     responses:
+ *       200:
+ *         description: Activity logs retrieved successfully
+ *//* ============================================
+   ATTENDANCE SESSIONS
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/attendance/sessions/start:
+ *   post:
+ *     summary: Start attendance session
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [group_id, grade_id]
+ *             properties:
+ *               group_id: { type: integer }
+ *               grade_id: { type: integer }
+ *               lock_at: { type: string, format: date-time }
+ *     responses:
+ *       201:
+ *         description: Session started
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/attendance/sessions/active/{groupId}:
+ *   get:
+ *     summary: Get active session
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: groupId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Active session retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/attendance/sessions/{id}/toggle-makeup:
+ *   put:
+ *     summary: Toggle makeup mode
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Makeup mode toggled
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/attendance/scan-barcode:
+ *   post:
+ *     summary: Scan barcode for attendance
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [barcode, group_id, grade_id, session_id]
+ *             properties:
+ *               barcode: { type: string }
+ *               group_id: { type: integer }
+ *               grade_id: { type: integer }
+ *               session_id: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Attendance recorded
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/attendance/sessions/lock:
+ *   post:
+ *     summary: Lock session
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [id, groupId]
+ *             properties:
+ *               id: { type: integer }
+ *               groupId: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Session locked
+ *//* ============================================
+   QUESTIONS MANAGEMENT
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/questions:
+ *   post:
+ *     summary: Create question
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [exam_id, question_text, type, order]
+ *             properties:
+ *               exam_id: { type: integer }
+ *               question_text: { type: string }
+ *               type: { type: string, enum: [mcq, true_false, essay] }
+ *               order: { type: integer }
+ *     responses:
+ *       201:
+ *         description: Question created
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/questions/exam/{examId}:
+ *   get:
+ *     summary: Get questions by exam
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Questions retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/questions/{questionId}:
+ *   get:
+ *     summary: Get question by ID
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Question retrieved
+ *   put:
+ *     summary: Update question
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Question updated
+ *   delete:
+ *     summary: Delete question
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Question deleted
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/questions/{questionId}/download:
+ *   get:
+ *     summary: Download question file
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File downloaded
+ *//* ============================================
+   OPTIONS MANAGEMENT
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/options:
+ *   post:
+ *     summary: Create option
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [question_id, option_text, is_correct, order]
+ *             properties:
+ *               question_id: { type: integer }
+ *               option_text: { type: string }
+ *               is_correct: { type: integer, enum: [0, 1] }
+ *               order: { type: integer }
+ *     responses:
+ *       201:
+ *         description: Option created
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/options/question/{questionId}:
+ *   get:
+ *     summary: Get options by question
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Options retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/options/{optionId}:
+ *   get:
+ *     summary: Get option by ID
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: optionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Option retrieved
+ *   put:
+ *     summary: Update option
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: optionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Option updated
+ *   delete:
+ *     summary: Delete option
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: optionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Option deleted
+ *//* ============================================
+   EXAM RESULTS MANAGEMENT
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results:
+ *   post:
+ *     summary: Create exam result
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [exam_id, student_id, degree]
+ *             properties:
+ *               exam_id: { type: integer }
+ *               student_id: { type: integer }
+ *               degree: { type: number }
+ *               notes: { type: string }
+ *     responses:
+ *       201:
+ *         description: Result created
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/upsert:
+ *   post:
+ *     summary: Upsert exam result
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [exam_id, student_id, degree]
+ *             properties:
+ *               exam_id: { type: integer }
+ *               student_id: { type: integer }
+ *               degree: { type: number }
+ *               notes: { type: string }
+ *     responses:
+ *       200:
+ *         description: Result upserted
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/upsert-batch/{examId}:
+ *   post:
+ *     summary: Upsert batch exam results
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [records]
+ *             properties:
+ *               records:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required: [barcode, degree]
+ *                   properties:
+ *                     barcode: { type: string }
+ *                     degree: { type: number }
+ *                     notes: { type: string }
+ *     responses:
+ *       200:
+ *         description: Batch processed
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/exam/{examId}:
+ *   get:
+ *     summary: Get exam results
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Results retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/exam/{examId}/stats:
+ *   get:
+ *     summary: Get exam result stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/grade/{gradeId}/stats:
+ *   get:
+ *     summary: Get grade exam results stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: gradeId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/group/{groupId}/stats:
+ *   get:
+ *     summary: Get group exam results stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: groupId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/exam-results/{id}:
+ *   put:
+ *     summary: Update exam result
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Result updated
+ *   delete:
+ *     summary: Delete exam result
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Result deleted
+ *//* ============================================
+   STUDENT EXAMS MANAGEMENT
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-exams/exam/{examId}:
+ *   get:
+ *     summary: Get student exams by exam
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Student exams retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-exams/exam/{examId}/stats:
+ *   get:
+ *     summary: Get exam attempt stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-exams/grade/{gradeId}/stats:
+ *   get:
+ *     summary: Get grade exam attempts stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: gradeId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-exams/group/{groupId}/stats:
+ *   get:
+ *     summary: Get group exam attempts stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: groupId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ *//* ============================================
+   STUDENT ANSWERS MANAGEMENT
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-answers/question/{questionId}/stats:
+ *   get:
+ *     summary: Get question answer stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-answers/question/{questionId}/options:
+ *   get:
+ *     summary: Get most selected options
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Options retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-answers/essay/pending:
+ *   get:
+ *     summary: Get pending essay answers
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     responses:
+ *       200:
+ *         description: Pending answers retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-answers/essay/exam/{examId}:
+ *   get:
+ *     summary: Get essay answers by exam
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Essay answers retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-answers/{answerId}/grade:
+ *   put:
+ *     summary: Grade essay answer
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: answerId
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [is_correct]
+ *             properties:
+ *               is_correct: { type: integer, enum: [0, 1] }
+ *     responses:
+ *       200:
+ *         description: Answer graded
+ *//* ============================================
+   ASSIGNMENT SUBMISSIONS MANAGEMENT
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/assignment/{assignmentId}:
+ *   get:
+ *     summary: Get submissions by assignment
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Submissions retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/assignment/{assignmentId}/student/{studentId}:
+ *   get:
+ *     summary: Get student submission
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Submission retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/assignment/{assignmentId}/submitted-students:
+ *   get:
+ *     summary: Get submitted students
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Students retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/assignment/{assignmentId}/not-submitted-students:
+ *   get:
+ *     summary: Get not submitted students
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Students retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/stats/assignment/{assignmentId}:
+ *   get:
+ *     summary: Get assignment submission stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/stats/grade/{gradeId}:
+ *   get:
+ *     summary: Get grade assignment submissions stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: gradeId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/stats/group/{groupId}:
+ *   get:
+ *     summary: Get group assignment submissions stats
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: groupId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Stats retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignment-submissions/{submissionId}/grade:
+ *   put:
+ *     summary: Grade assignment submission
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: submissionId
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [score]
+ *             properties:
+ *               score: { type: number }
+ *               feedback: { type: string }
+ *     responses:
+ *       200:
+ *         description: Submission graded
+ *//* ============================================
+   PLAYLIST VIDEOS MANAGEMENT
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/playlist-videos/playlist/{playlistId}:
+ *   get:
+ *     summary: Get playlist videos
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: playlistId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Videos retrieved
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/playlist-videos:
+ *   post:
+ *     summary: Add video to playlist
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [playlist_id, video_id]
+ *             properties:
+ *               playlist_id: { type: integer }
+ *               video_id: { type: integer }
+ *     responses:
+ *       201:
+ *         description: Video added
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/playlist-videos/{id}:
+ *   delete:
+ *     summary: Remove video from playlist
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Video removed
+ */

@@ -1,9 +1,16 @@
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+
+// Create upload directory if not exists
+const uploadDir = "uploads/photos";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/photos");
+    cb(null, uploadDir);
   },
 
   filename: (req, file, cb) => {
@@ -17,16 +24,12 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-  ];
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("يسمح برفع الصور فقط"));
+    cb(new Error("Only images allowed"));
   }
 };
 
@@ -34,7 +37,7 @@ const profileImageUpload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB كحد أقصى للصور
+    fileSize: 5 * 1024 * 1024,
   },
 });
 

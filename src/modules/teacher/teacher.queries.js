@@ -83,7 +83,7 @@ ORDER BY p.payment_date DESC
 LIMIT 1
 `;
 
-// Get recent activities
+// Get recent activities (assistants only - excluding super_admin)
 const getRecentActivities = `
 SELECT 
   al.id,

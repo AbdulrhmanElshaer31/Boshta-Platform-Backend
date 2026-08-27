@@ -1,21 +1,28 @@
 const express = require("express");
 const routes = express.Router();
+
+// Uploads
 const assignmentUpload = require("../../middlewares/uploads/assignmentUpload");
 const videoFilesUpload = require("../../middlewares/uploads/videoFilesUpload");
 const examUpload = require("../../middlewares/uploads/examUpload");
 const playlistThumbnailUpload = require("../../middlewares/uploads/playlistThumbnailUpload");
+const excelUpload = require("../../middlewares/uploads/excelUpload");
 
 // Controllers
 const assistantController = require("./assistant.controller");
 const usersController = require("../users/users.controller");
 const gradesController = require("../grades/grades.controller");
+const gradesBulkController = require("../grades/grades.bulk.controller");
 const groupsController = require("../groups/groups.controller");
+const groupsBulkController = require("../groups/groups.bulk.controller");
 const studentsController = require("../students/students.controller");
+const studentsBulkController = require("../students/students.bulk.controller");
 const attendanceController = require("../attendance/attendance.controller");
 const paymentsController = require("../payments/payments.controller");
 const subscriptionsController = require("../subscriptions/subscriptions.controller");
 const examsController = require("../exams/exams.controller");
 const examResultsController = require("../exam_results/exam_results.controller");
+const examResultsBulkController = require("../exam_results/exam_results.bulk.controller");
 const onlineExamController = require("../online_exams/online_exams.controller");
 const questionController = require("../questions/questions.controller");
 const optionController = require("../options/options.controller");
@@ -54,7 +61,7 @@ routes.get("/activity-log", assistantController.getActivityLog);
 // Update profile image
 routes.put(
   "/profile-image",
-  profileImageUpload.single("image"), // ✅ موجود
+  profileImageUpload.single("image"),
   usersController.updateUserProfileImage,
 );
 
@@ -119,12 +126,12 @@ routes.get(
 );
 routes.post(
   "/questions",
-  examUpload.single("file"), // ✅ ملف السؤال
+  examUpload.single("file"),
   questionController.createQuestion,
 );
 routes.put(
   "/questions/:questionId",
-  examUpload.single("file"), // ✅ ملف السؤال
+  examUpload.single("file"),
   questionController.updateQuestion,
 );
 routes.delete("/questions/:questionId", questionController.deleteQuestion);
@@ -159,12 +166,12 @@ routes.get(
 );
 routes.post(
   "/assignments",
-  assignmentUpload.single("file"), // ✅ ملف الواجب
+  assignmentUpload.single("file"),
   assignmentController.createAssignment,
 );
 routes.put(
   "/assignments/:assignmentId",
-  assignmentUpload.single("file"), // ✅ ملف الواجب
+  assignmentUpload.single("file"),
   assignmentController.updateAssignment,
 );
 routes.delete(
@@ -220,7 +227,7 @@ routes.post(
   videoFilesUpload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "file", maxCount: 1 },
-  ]), // ✅ رفع صورة + ملف
+  ]),
   videoController.createVideo,
 );
 routes.put(
@@ -228,7 +235,7 @@ routes.put(
   videoFilesUpload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "file", maxCount: 1 },
-  ]), // ✅ رفع صورة + ملف
+  ]),
   videoController.updateVideo,
 );
 routes.delete("/videos/:videoId", videoController.hardDeleteVideo);
@@ -242,12 +249,12 @@ routes.get(
 routes.get("/playlists/:playlistId", playlistController.getPlaylistById);
 routes.post(
   "/playlists",
-  playlistThumbnailUpload.single("thumbnail"), // ✅ صورة القائمة
+  playlistThumbnailUpload.single("thumbnail"),
   playlistController.createPlaylist,
 );
 routes.put(
   "/playlists/:playlistId",
-  playlistThumbnailUpload.single("thumbnail"), // ✅ صورة القائمة
+  playlistThumbnailUpload.single("thumbnail"),
   playlistController.updatePlaylist,
 );
 routes.delete("/playlists/:playlistId", playlistController.hardDeletePlaylist);
@@ -269,6 +276,52 @@ routes.delete(
    ============================================ */
 
 routes.use(centerManagementAuth);
+
+// ============================================
+// BULK UPLOAD ROUTES (Excel)
+// ============================================
+
+// Students Bulk Upload
+routes.get(
+  "/students/template",
+  studentsBulkController.downloadStudentsTemplate,
+);
+routes.post(
+  "/students/bulk-upload",
+  excelUpload.single("file"),
+  studentsBulkController.bulkUploadStudents,
+);
+
+// Grades Bulk Upload
+routes.get("/grades/template", gradesBulkController.downloadGradesTemplate);
+routes.post(
+  "/grades/bulk-upload",
+  excelUpload.single("file"),
+  gradesBulkController.bulkUploadGrades,
+);
+
+// Groups Bulk Upload
+routes.get("/groups/template", groupsBulkController.downloadGroupsTemplate);
+routes.post(
+  "/groups/bulk-upload",
+  excelUpload.single("file"),
+  groupsBulkController.bulkUploadGroups,
+);
+
+// Exam Results Bulk Upload
+routes.get(
+  "/exam-results/template",
+  examResultsBulkController.downloadExamResultsTemplate,
+);
+routes.post(
+  "/exam-results/bulk-upload/:examId",
+  excelUpload.single("file"),
+  examResultsBulkController.bulkUploadExamResults,
+);
+
+// ============================================
+// REGULAR ROUTES
+// ============================================
 
 // Grades - CRUD
 routes.get("/grades", gradesController.getAllGrades);

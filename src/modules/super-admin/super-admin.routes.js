@@ -6,13 +6,17 @@ const superAdminController = require("./super-admin.controller");
 const usersController = require("../users/users.controller");
 const settingsController = require("../settings/settings.controller");
 const gradesController = require("../grades/grades.controller");
+const gradesBulkController = require("../grades/grades.bulk.controller");
 const groupsController = require("../groups/groups.controller");
+const groupsBulkController = require("../groups/groups.bulk.controller");
 const studentsController = require("../students/students.controller");
+const studentsBulkController = require("../students/students.bulk.controller");
 const attendanceController = require("../attendance/attendance.controller");
 const paymentsController = require("../payments/payments.controller");
 const subscriptionsController = require("../subscriptions/subscriptions.controller");
 const examsController = require("../exams/exams.controller");
 const examResultsController = require("../exam_results/exam_results.controller");
+const examResultsBulkController = require("../exam_results/exam_results.bulk.controller");
 const onlineExamController = require("../online_exams/online_exams.controller");
 const questionController = require("../questions/questions.controller");
 const optionController = require("../options/options.controller");
@@ -24,6 +28,9 @@ const videoController = require("../videos/videos.controller");
 const playlistController = require("../playlists/playlists.controller");
 const playlistVideoController = require("../playlist_videos/playlist_videos.controller");
 const whatsappController = require("../whatsapp_messages/whatsapp_messages.controller");
+
+// Middleware
+const excelUpload = require("../../middlewares/uploads/excelUpload");
 
 /* ============================================
    SUPER ADMIN - DASHBOARD & ACTIVITY LOG
@@ -77,6 +84,21 @@ routes.put(
 /* ============================================
    SUPER ADMIN - STUDENTS MANAGEMENT
    ============================================ */
+
+// ============================================
+// BULK UPLOAD ROUTES (Excel)
+// ============================================
+
+// Students Bulk Upload
+routes.get(
+  "/students/template",
+  studentsBulkController.downloadStudentsTemplate,
+);
+routes.post(
+  "/students/bulk-upload",
+  excelUpload.single("file"),
+  studentsBulkController.bulkUploadStudents,
+);
 
 // Students CRUD
 routes.get("/students", studentsController.getAllStudents);
@@ -190,6 +212,26 @@ routes.post("/students/:studentId/restore", studentsController.restoreStudent);
 /* ============================================
    SUPER ADMIN - GRADES & GROUPS
    ============================================ */
+
+// ============================================
+// BULK UPLOAD ROUTES (Excel)
+// ============================================
+
+// Grades Bulk Upload
+routes.get("/grades/template", gradesBulkController.downloadGradesTemplate);
+routes.post(
+  "/grades/bulk-upload",
+  excelUpload.single("file"),
+  gradesBulkController.bulkUploadGrades,
+);
+
+// Groups Bulk Upload
+routes.get("/groups/template", groupsBulkController.downloadGroupsTemplate);
+routes.post(
+  "/groups/bulk-upload",
+  excelUpload.single("file"),
+  groupsBulkController.bulkUploadGroups,
+);
 
 // Grades
 routes.get("/grades", gradesController.getAllGrades);
@@ -348,6 +390,21 @@ routes.delete("/subscriptions/:id", subscriptionsController.deleteSubscription);
 /* ============================================
    SUPER ADMIN - EXAMS
    ============================================ */
+
+// ============================================
+// BULK UPLOAD ROUTES (Excel)
+// ============================================
+
+// Exam Results Bulk Upload
+routes.get(
+  "/exam-results/template",
+  examResultsBulkController.downloadExamResultsTemplate,
+);
+routes.post(
+  "/exam-results/bulk-upload/:examId",
+  excelUpload.single("file"),
+  examResultsBulkController.bulkUploadExamResults,
+);
 
 // Paper Exams
 routes.get("/exams", examsController.getAllExams);

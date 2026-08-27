@@ -24,6 +24,10 @@ async function createGroupsTable() {
     `CREATE INDEX IF NOT EXISTS idx_groups_deleted ON groups(deleted)`,
   );
 
+  await query(
+    `CREATE INDEX IF NOT EXISTS idx_groups_name_grade ON groups(name, grade_id, deleted)`,
+  );
+
   console.log("groups table created");
 }
 

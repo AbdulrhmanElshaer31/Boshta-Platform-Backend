@@ -1,16 +1,23 @@
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const compression = require("compression");
+const rateLimit = require("express-rate-limit");
+const morgan = require("morgan");
 
 // Routes
 const authRouts = require("./modules/auth/auth.routes");
-const studentModuleRoutes = require("./modules/student/student.routes"); // ✅ الجديد
+const studentModuleRoutes = require("./modules/student/student.routes");
 const parentRoutes = require("./modules/parent/parent.routes");
 const assistantRoutes = require("./modules/assistant/assistant.routes");
 const teacherRoutes = require("./modules/teacher/teacher.routes");
 const superAdminRoutes = require("./modules/super-admin/super-admin.routes");
 
 // Middleware
-const errorHandler = require("./middlewares/error.middleware");
+const {
+  errorHandler,
+  notFoundHandler,
+} = require("./middlewares/error.middleware");
 const apiMiddelware = require("./middlewares/apiAuth.middleware");
 const clientAuth = require("./middlewares/clientAuth.middleware");
 const assistantAuth = require("./middlewares/assistantAuth.middleware");
@@ -19,21 +26,127 @@ const superAdminAuth = require("./middlewares/superAdminAuth.middleware");
 
 // Database
 const { query } = require("./config/database");
+const env = require("./config/env");
 
 // Swagger
 const swaggerSpec = require("./docs/swagger");
 
 const app = express();
 
-// Global Middleware
-app.use(cors());
-app.use(express.json());
+// ============================================
+// SECURITY MIDDLEWARE
+// ============================================
+
+// Helmet - HTTP security headers
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  }),
+);
+
+// CORS - restrict origins
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (env.CORS_ORIGINS.includes("*") || env.CORS_ORIGINS.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "x-client-key",
+      "x-super-admin-key",
+    ],
+  }),
+);
+
+// Compression
+app.use(compression());
+
+// Body parser
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Logging
+if (env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+} else {
+  app.use(morgan("dev"));
+}
+
+// ============================================
+// RATE LIMITING
+// ============================================
+
+// General rate limit
+const generalLimiter = rateLimit({
+  windowMs: env.RATE_LIMIT_WINDOW_MS,
+  max: env.RATE_LIMIT_MAX,
+  message: {
+    success: false,
+    message: "Too many requests, try again later",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Auth rate limit
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: env.RATE_LIMIT_AUTH_MAX,
+  message: {
+    success: false,
+    message: "Too many login attempts, try after 15 minutes",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Upload rate limit
+const uploadLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 50,
+  message: {
+    success: false,
+    message: "Too many uploads, try later",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limits
+app.use("/api", generalLimiter);
+app.use("/api/auth", authLimiter);
+app.use("/api/*/bulk-upload", uploadLimiter);
+app.use("/api/*/*/bulk-upload", uploadLimiter);
+
+// ============================================
+// ROOT ROUTES
+// ============================================
 
 // Root
 app.get("/", (req, res) => {
   res.json({
     success: true,
     message: "Welcome To Jupiter Learn API!",
+    version: "1.0.0",
+    environment: env.NODE_ENV,
+  });
+});
+
+// Health check
+app.get("/health", (req, res) => {
+  res.json({
+    success: true,
+    message: "Server is running",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -73,10 +186,17 @@ app.get("/api-docs", (req, res) => {
   `);
 });
 
-// Check platform status middleware
+// ============================================
+// PLATFORM STATUS CHECK
+// ============================================
+
 const checkPlatformStatus = async (req, res, next) => {
   try {
-    if (req.path.includes("/super-admin") || req.path.includes("/auth")) {
+    if (
+      req.path.includes("/super-admin") ||
+      req.path.includes("/auth") ||
+      req.path.includes("/health")
+    ) {
       return next();
     }
 
@@ -88,7 +208,7 @@ const checkPlatformStatus = async (req, res, next) => {
     if (platformStatus === "paused") {
       return res.status(403).json({
         success: false,
-        message: "المنصة مغلقة مؤقتاً للصيانة",
+        message: "Platform is temporarily closed for maintenance",
       });
     }
 
@@ -100,9 +220,12 @@ const checkPlatformStatus = async (req, res, next) => {
 
 app.use(checkPlatformStatus);
 
-// API Routes
+// ============================================
+// API ROUTES
+// ============================================
+
 app.use("/api/auth", apiMiddelware, authRouts);
-app.use("/api/student", apiMiddelware, clientAuth, studentModuleRoutes); // ✅ الجديد
+app.use("/api/student", apiMiddelware, clientAuth, studentModuleRoutes);
 app.use("/api/parent", apiMiddelware, parentRoutes);
 app.use(
   "/api/assistant",
@@ -120,13 +243,12 @@ app.use(
   superAdminRoutes,
 );
 
+// ============================================
+// ERROR HANDLING
+// ============================================
+
 // 404 Handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: "Route not found",
-  });
-});
+app.use(notFoundHandler);
 
 // Error Handler
 app.use(errorHandler);

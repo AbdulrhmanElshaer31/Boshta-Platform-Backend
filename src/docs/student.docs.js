@@ -637,3 +637,84 @@
  *       200:
  *         description: Subscription retrieved successfully
  */
+/**
+ * @swagger
+ * /api/student/exams/online/{examId}/questions:
+ *   get:
+ *     summary: Get exam questions
+ *     description: Get all questions for specific online exam
+ *     tags: [Student]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: examId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Questions retrieved successfully
+ *//**
+ * @swagger
+ * /api/student/exams/online/question/{questionId}:
+ *   get:
+ *     summary: Get question by ID
+ *     description: Get specific question details
+ *     tags: [Student]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Question retrieved successfully
+ *//**
+ * @swagger
+ * /api/student/options/question/{questionId}:
+ *   get:
+ *     summary: Get options by question
+ *     description: Get answer options for specific question
+ *     tags: [Student]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Options retrieved successfully
+ *//**
+ * @swagger
+ * /api/student/assignments/{assignmentId}/download:
+ *   get:
+ *     summary: Download assignment file
+ *     description: Download assignment file
+ *     tags: [Student]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File downloaded successfully
+ *//**
+ * @swagger
+ * /api/student/homeWorkSubmission/{assignmentId}/download:
+ *   get:
+ *     summary: Download own submission
+ *     description: Download student's own submission file
+ *     tags: [Student]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File downloaded successfully
+ */

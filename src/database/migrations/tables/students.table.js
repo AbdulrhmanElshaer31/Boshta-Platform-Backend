@@ -42,6 +42,13 @@ async function createStudentsTable() {
     `CREATE INDEX IF NOT EXISTS idx_students_deleted ON students(deleted)`,
   );
 
+  await query(
+    `CREATE INDEX IF NOT EXISTS idx_students_barcode_deleted ON students(barcode, deleted)`,
+  );
+  await query(
+    `CREATE INDEX IF NOT EXISTS idx_students_phone_not_null ON students(phone) WHERE phone IS NOT NULL`,
+  );
+
   console.log("students table created");
 }
 

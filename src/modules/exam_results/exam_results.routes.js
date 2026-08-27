@@ -1,13 +1,33 @@
 const express = require("express");
 const routes = express.Router();
 const examResultController = require("./exam_results.controller");
+const examResultsBulkController = require("./exam_results.bulk.controller");
 const validate = require("../../middlewares/validate.middleware");
+const excelUpload = require("../../middlewares/uploads/excelUpload");
 const {
   createExamResultSchema,
   upsertExamResultSchema,
   upsertBatchSchema,
   updateExamResultSchema,
 } = require("../../middlewares/validations/examResults.validation");
+
+// ============================================
+// BULK UPLOAD ROUTES
+// ============================================
+
+// تحميل Template للدرجات
+routes.get("/template", examResultsBulkController.downloadExamResultsTemplate);
+
+// رفع ملف Excel لإضافة درجات
+routes.post(
+  "/bulk-upload/:examId",
+  excelUpload.single("file"),
+  examResultsBulkController.bulkUploadExamResults,
+);
+
+// ============================================
+// REGULAR ROUTES
+// ============================================
 
 // Create exam result
 routes.post(

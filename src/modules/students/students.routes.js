@@ -1,6 +1,8 @@
 const express = require("express");
 const routes = express.Router();
 const stdController = require("./students.controller");
+const studentsBulkController = require("./students.bulk.controller");
+const excelUpload = require("../../middlewares/uploads/excelUpload");
 const validate = require("../../middlewares/validate.middleware");
 const {
   createStudentSchema,
@@ -9,7 +11,23 @@ const {
   updateStudentProfileImageSchema,
 } = require("../../middlewares/validations/students.validation");
 
-//PART 1: CRUD & SEARCH ROUTES
+// ============================================
+// BULK OPERATIONS ROUTES
+// ============================================
+
+// تحميل Template للطلاب
+routes.get("/template", studentsBulkController.downloadStudentsTemplate);
+
+// رفع ملف Excel لإضافة طلاب
+routes.post(
+  "/bulk-upload",
+  excelUpload.single("file"),
+  studentsBulkController.bulkUploadStudents,
+);
+
+// ============================================
+// PART 1: CRUD & SEARCH ROUTES
+// ============================================
 
 // Create a new student
 routes.post("/", validate(createStudentSchema), stdController.createStudent);
@@ -54,7 +72,9 @@ routes.delete("/:studentId/permanent", stdController.hardDeleteStudent);
 // Restore a soft-deleted student
 routes.post("/:studentId/restore", stdController.restoreStudent);
 
+// ============================================
 // PART 2: PROFILE & STATISTICS ROUTES
+// ============================================
 
 // Get student full profile
 routes.get("/:studentId/profile", stdController.getStudentProfile);
@@ -115,7 +135,9 @@ routes.get(
   stdController.getCurrentSubscription,
 );
 
+// ============================================
 // PART 3: EXAMS, ASSIGNMENTS & CONTENT ROUTES
+// ============================================
 
 // Get paper exams
 routes.get("/:studentId/exams/paper", stdController.getStudentPaperExams);

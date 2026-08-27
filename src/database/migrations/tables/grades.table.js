@@ -17,6 +17,10 @@ async function createGradesTable() {
     `CREATE INDEX IF NOT EXISTS idx_grades_deleted ON grades(deleted)`,
   );
 
+  await query(
+    `CREATE INDEX IF NOT EXISTS idx_grades_name_deleted ON grades(name, deleted)`,
+  );
+
   console.log("grades table created");
 }
 
