@@ -25,7 +25,7 @@ const processExamResultsBulk = async (examId, data) => {
   let errorCount = 0;
 
   // مصفوفات للـ bulk insert
-  const barcodes = []; // ✅ إضافة مصفوفة الباركودات
+  const barcodes = [];
   const examIds = [];
   const studentIds = [];
   const degrees = [];
@@ -37,8 +37,9 @@ const processExamResultsBulk = async (examId, data) => {
     const rowNumber = i + 2; // +2 لأن الصف الأول هو العناوين
 
     try {
-      // التحقق من البيانات المطلوبة
+      // ✅ دعم اسم الطالب (اختياري) + الباركود (مطلوب) + الدرجة (مطلوبة)
       const barcode = String(row.barcode || "").trim();
+      const studentName = row.student_name || row.full_name || row.name || "";
       const degree = cleanNumber(row.degree);
       const notes = row.notes ? String(row.notes).trim() : null;
 
@@ -61,7 +62,7 @@ const processExamResultsBulk = async (examId, data) => {
         );
       }
 
-      // ✅ التصحيح: التحقق من عدم تكرار الباركود في الملف
+      // التحقق من عدم تكرار الباركود في الملف
       if (barcodes.includes(barcode)) {
         throw new Error(`الباركود مكرر في الملف: ${barcode}`);
       }
@@ -74,7 +75,59 @@ const processExamResultsBulk = async (examId, data) => {
       const student = studentResult.rows[0];
 
       if (!student) {
+        // ✅ لو الطالب مش موجود بالباركود، جرب البحث بالاسم
+        if (studentName) {
+          const studentByName = await query(
+            "SELECT id, full_name, grade_id, group_id FROM students WHERE full_name = $1 AND deleted = 0",
+            [String(studentName).trim()],
+          );
+
+          if (studentByName.rows[0]) {
+            // ✅ الطالب موجود بالاسم - استخدمه
+            const foundStudent = studentByName.rows[0];
+
+            // التحقق من أن الطالب في نفس صف الامتحان
+            if (exam.grade_id && foundStudent.grade_id !== exam.grade_id) {
+              throw new Error(
+                `الطالب ${foundStudent.full_name} ليس في صف الامتحان`,
+              );
+            }
+
+            // التحقق من أن الطالب في نفس مجموعة الامتحان
+            if (exam.group_id && foundStudent.group_id !== exam.group_id) {
+              throw new Error(
+                `الطالب ${foundStudent.full_name} ليس في مجموعة الامتحان`,
+              );
+            }
+
+            // إضافة البيانات
+            barcodes.push(barcode);
+            examIds.push(examId);
+            studentIds.push(foundStudent.id);
+            degrees.push(degree);
+            notesList.push(notes);
+
+            results.push({
+              row_number: rowNumber,
+              barcode,
+              student_name: foundStudent.full_name,
+              degree,
+              status: "success",
+              matched_by: "name", // ✅ توضيح إنه اتطابق بالاسم
+            });
+            successCount++;
+            continue; // ✅ انتقل للصف التالي
+          }
+        }
+
         throw new Error(`الطالب غير موجود: ${barcode}`);
+      }
+
+      // ✅ لو الطالب موجود بالباركود، تحقق من الاسم لو موجود
+      if (studentName && student.full_name !== String(studentName).trim()) {
+        throw new Error(
+          `الباركود (${barcode}) لا يطابق الاسم (${studentName}) - الاسم الصحيح: ${student.full_name}`,
+        );
       }
 
       // التحقق من أن الطالب في نفس صف الامتحان
@@ -82,12 +135,12 @@ const processExamResultsBulk = async (examId, data) => {
         throw new Error(`الطالب ${student.full_name} ليس في صف الامتحان`);
       }
 
-      // التحقق من أن الطالب في نفس مجموعة الامتحان (لو محدد)
+      // التحقق من أن الطالب في نفس مجموعة الامتحان
       if (exam.group_id && student.group_id !== exam.group_id) {
         throw new Error(`الطالب ${student.full_name} ليس في مجموعة الامتحان`);
       }
 
-      // ✅ إضافة البيانات للمصفوفات (بما فيها الباركود)
+      // إضافة البيانات للمصفوفات
       barcodes.push(barcode);
       examIds.push(examId);
       studentIds.push(student.id);
@@ -100,12 +153,14 @@ const processExamResultsBulk = async (examId, data) => {
         student_name: student.full_name,
         degree,
         status: "success",
+        matched_by: "barcode", // ✅ توضيح إنه اتطابق بالباركود
       });
       successCount++;
     } catch (error) {
       errors.push({
         row_number: rowNumber,
         barcode: row.barcode || null,
+        student_name: row.student_name || row.full_name || row.name || null,
         error: error.message,
         status: "error",
       });
@@ -145,7 +200,7 @@ const processExamResultsBulk = async (examId, data) => {
         }
       });
     } catch (error) {
-      console.error("❌ Bulk insert error:", error);
+      console.error("Bulk insert error:", error);
       throw new Error(`فشل إدخال الدرجات: ${error.message}`);
     }
   }

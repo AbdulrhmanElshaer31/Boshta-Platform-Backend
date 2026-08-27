@@ -173,7 +173,6 @@
  *               type: string
  *               format: binary
  */
-
 /**
  * @swagger
  * /api/assistant/students/bulk-upload:
@@ -193,12 +192,11 @@
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: Excel file (.xlsx) with columns: barcode, full_name, phone, parent_phone, grade_name, group_name, notes
+ *                 description: Excel file with student data columns
  *     responses:
  *       200:
  *         description: File processed successfully
  */
-
 /**
  * @swagger
  * /api/assistant/grades/template:
@@ -230,7 +228,7 @@
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: Excel file with columns: name, monthly_price
+ *                 description: "Excel file with columns: name, monthly_price"
  *     responses:
  *       200:
  *         description: File processed successfully
@@ -267,7 +265,7 @@
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: Excel file with columns: name, grade_name, days, start_time, end_time, room
+ *                 description: "Excel file with columns: name, grade_name, days, start_time, end_time, room"
  *     responses:
  *       200:
  *         description: File processed successfully
@@ -310,7 +308,7 @@
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: Excel file with columns: barcode, degree, notes
+ *                 description: "Excel file with columns: barcode, degree, notes"
  *     responses:
  *       200:
  *         description: File processed successfully
@@ -1462,59 +1460,6 @@
  *     responses:
  *       200:
  *         description: Retrieved successfully
- */
-
-/**
- * @swagger
- * /api/assistant/attendance/{id}:
- *   get:
- *     summary: Get attendance by ID
- *     tags: [Assistant - Attendance]
- *     security: [{ ApiAuth: [], ClientToken: [] }]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
- *     responses:
- *       200:
- *         description: Retrieved successfully
- *   put:
- *     summary: Update attendance
- *     tags: [Assistant - Attendance]
- *     security: [{ ApiAuth: [], ClientToken: [] }]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               status: { type: string, enum: [present, absent] }
- *               attendance_time: { type: string }
- *               method: { type: string }
- *               is_makeup: { type: integer }
- *               makeup_group_id: { type: integer }
- *               notes: { type: string }
- *     responses:
- *       200:
- *         description: Attendance updated
- *   delete:
- *     summary: Delete attendance
- *     tags: [Assistant - Attendance]
- *     security: [{ ApiAuth: [], ClientToken: [] }]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
- *     responses:
- *       200:
- *         description: Attendance deleted
  */
 
 /**
@@ -3483,7 +3428,8 @@
  *     responses:
  *       200:
  *         description: Status toggled
- /**
+ */
+/**
  * @swagger
  * /api/assistant/attendance/{id}:
  *   get:

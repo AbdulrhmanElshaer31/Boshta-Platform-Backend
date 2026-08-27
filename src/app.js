@@ -120,11 +120,18 @@ const uploadLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+// Upload rate limit middleware
+const uploadLimiterMiddleware = (req, res, next) => {
+  if (req.path.includes("bulk-upload")) {
+    return uploadLimiter(req, res, next);
+  }
+  next();
+};
+
 // Apply rate limits
 app.use("/api", generalLimiter);
 app.use("/api/auth", authLimiter);
-app.use("/api/*/bulk-upload", uploadLimiter);
-app.use("/api/*/*/bulk-upload", uploadLimiter);
+app.use("/api", uploadLimiterMiddleware);
 
 // ============================================
 // ROOT ROUTES
