@@ -2,6 +2,7 @@ const express = require("express");
 const routes = express.Router();
 
 // Controllers
+const previewController = require("../../controllers/preview.controller");
 const superAdminController = require("./super-admin.controller");
 const usersController = require("../users/users.controller");
 const settingsController = require("../settings/settings.controller");
@@ -386,7 +387,20 @@ routes.put(
   subscriptionsController.updateSubscriptionStatus,
 );
 routes.delete("/subscriptions/:id", subscriptionsController.deleteSubscription);
-
+// Preview routes
+routes.get(
+  "/assignments/:assignmentId/preview",
+  previewController.previewAssignment,
+);
+routes.get("/videos/:videoId/preview", previewController.previewVideoFile);
+routes.get(
+  "/questions/:questionId/preview",
+  previewController.previewQuestionFile,
+);
+routes.get(
+  "/student-answers/:answerId/preview",
+  previewController.previewStudentAnswer,
+);
 /* ============================================
    SUPER ADMIN - EXAMS
    ============================================ */

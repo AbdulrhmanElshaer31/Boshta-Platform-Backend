@@ -7,6 +7,8 @@
  *     description: Student management endpoints (CRUD, search, profile, stats)
  *   - name: Assistant - Grades
  *     description: Grade/Class management endpoints
+ *   - name: Assistant - Download & Preview
+ *     description: File download and preview endpoints
  *   - name: Assistant - Groups
  *     description: Group management endpoints
  *   - name: Assistant - Attendance
@@ -3618,4 +3620,78 @@
  *     responses:
  *       200:
  *         description: Template retrieved successfully
+ */ /* ============================================
+   DOWNLOAD & PREVIEW
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/assistant/assignments/{assignmentId}/preview:
+ *   get:
+ *     summary: Preview assignment file
+ *     description: Open assignment file in browser
+ *     tags: [Assistant - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/assistant/videos/{videoId}/preview:
+ *   get:
+ *     summary: Preview video file
+ *     description: Open video file in browser
+ *     tags: [Assistant - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/assistant/questions/{questionId}/preview:
+ *   get:
+ *     summary: Preview question file
+ *     description: Open question file in browser
+ *     tags: [Assistant - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/assistant/student-answers/{answerId}/preview:
+ *   get:
+ *     summary: Preview student answer file
+ *     description: Open student answer file in browser
+ *     tags: [Assistant - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: answerId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
  */

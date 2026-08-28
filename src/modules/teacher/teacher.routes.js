@@ -1,6 +1,7 @@
 const express = require("express");
 const routes = express.Router();
 // Controllers
+const previewController = require("../../controllers/preview.controller");
 const teacherController = require("./teacher.controller");
 const usersController = require("../users/users.controller");
 const gradesController = require("../grades/grades.controller");
@@ -67,7 +68,20 @@ routes.put(
    TEACHER - READ-ONLY ROUTES
    (المدرس بيقرأ كل حاجة)
    ============================================ */
-
+// Preview routes
+routes.get(
+  "/assignments/:assignmentId/preview",
+  previewController.previewAssignment,
+);
+routes.get("/videos/:videoId/preview", previewController.previewVideoFile);
+routes.get(
+  "/questions/:questionId/preview",
+  previewController.previewQuestionFile,
+);
+routes.get(
+  "/student-answers/:answerId/preview",
+  previewController.previewStudentAnswer,
+);
 // Grades - قراءة + full-stats
 routes.get("/grades", gradesController.getAllGrades);
 routes.get("/grades/groups-count", gradesController.getGradesWithGroupsCount);

@@ -2290,7 +2290,7 @@
  *     responses:
  *       200:
  *         description: File processed successfully
- *//* ============================================
+ */ /* ============================================
    ACTIVITY LOG
    ============================================ */
 
@@ -2315,7 +2315,7 @@
  *     responses:
  *       200:
  *         description: Activity logs retrieved successfully
- *//* ============================================
+ */ /* ============================================
    ATTENDANCE SESSIONS
    ============================================ */
 
@@ -2420,7 +2420,7 @@
  *     responses:
  *       200:
  *         description: Session locked
- *//* ============================================
+ */ /* ============================================
    QUESTIONS MANAGEMENT
    ============================================ */
 
@@ -2521,7 +2521,7 @@
  *     responses:
  *       200:
  *         description: File downloaded
- *//* ============================================
+ */ /* ============================================
    OPTIONS MANAGEMENT
    ============================================ */
 
@@ -2605,7 +2605,7 @@
  *     responses:
  *       200:
  *         description: Option deleted
- *//* ============================================
+ */ /* ============================================
    EXAM RESULTS MANAGEMENT
    ============================================ */
 
@@ -2786,7 +2786,7 @@
  *     responses:
  *       200:
  *         description: Result deleted
- *//* ============================================
+ */ /* ============================================
    STUDENT EXAMS MANAGEMENT
    ============================================ */
 
@@ -2856,7 +2856,7 @@
  *     responses:
  *       200:
  *         description: Stats retrieved
- *//* ============================================
+ */ /* ============================================
    STUDENT ANSWERS MANAGEMENT
    ============================================ */
 
@@ -2947,7 +2947,7 @@
  *     responses:
  *       200:
  *         description: Answer graded
- *//* ============================================
+ */ /* ============================================
    ASSIGNMENT SUBMISSIONS MANAGEMENT
    ============================================ */
 
@@ -3099,7 +3099,7 @@
  *     responses:
  *       200:
  *         description: Submission graded
- *//* ============================================
+ */ /* ============================================
    PLAYLIST VIDEOS MANAGEMENT
    ============================================ */
 
@@ -3157,4 +3157,74 @@
  *     responses:
  *       200:
  *         description: Video removed
+ */ /* ============================================
+   DOWNLOAD & PREVIEW
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/super-admin/assignments/{assignmentId}/preview:
+ *   get:
+ *     summary: Preview assignment file
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/videos/{videoId}/preview:
+ *   get:
+ *     summary: Preview video file
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/questions/{questionId}/preview:
+ *   get:
+ *     summary: Preview question file
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/super-admin/student-answers/{answerId}/preview:
+ *   get:
+ *     summary: Preview student answer file
+ *     tags: [Super Admin]
+ *     security: [{ ApiAuth: [], ClientToken: [], SuperAdminKey: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: answerId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
  */

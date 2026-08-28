@@ -9,6 +9,7 @@ const playlistThumbnailUpload = require("../../middlewares/uploads/playlistThumb
 const excelUpload = require("../../middlewares/uploads/excelUpload");
 
 // Controllers
+const previewController = require("../../controllers/preview.controller");
 const assistantController = require("./assistant.controller");
 const usersController = require("../users/users.controller");
 const gradesController = require("../grades/grades.controller");
@@ -83,6 +84,20 @@ routes.put(
 routes.use(onlineManagementAuth);
 
 // Online Exams - CRUD كامل
+// Preview routes
+routes.get(
+  "/assignments/:assignmentId/preview",
+  previewController.previewAssignment,
+);
+routes.get("/videos/:videoId/preview", previewController.previewVideoFile);
+routes.get(
+  "/questions/:questionId/preview",
+  previewController.previewQuestionFile,
+);
+routes.get(
+  "/student-answers/:answerId/preview",
+  previewController.previewStudentAnswer,
+);
 routes.get("/online-exams", onlineExamController.getAllOnlineExams);
 routes.get(
   "/online-exams/available",

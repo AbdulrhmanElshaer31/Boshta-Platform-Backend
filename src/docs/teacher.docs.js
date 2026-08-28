@@ -1,12 +1,44 @@
 /**
  * @swagger
  * tags:
- *   name: Teacher
- *   description: Teacher dashboard endpoints (Read Only - Full Access View)
+ *   - name: Teacher - Profile & Dashboard
+ *     description: Teacher profile, dashboard, and activity log endpoints
+ *   - name: Teacher - Students
+ *     description: Student read-only endpoints
+ *   - name: Teacher - Grades
+ *     description: Grade read-only endpoints
+ *   - name: Teacher - Groups
+ *     description: Group read-only endpoints
+ *   - name: Teacher - Attendance
+ *     description: Attendance read-only endpoints
+ *   - name: Teacher - Payments
+ *     description: Payment read-only endpoints
+ *   - name: Teacher - Subscriptions
+ *     description: Subscription read-only endpoints
+ *   - name: Teacher - Paper Exams
+ *     description: Paper exam read-only endpoints
+ *   - name: Teacher - Exam Results
+ *     description: Exam result read-only endpoints
+ *   - name: Teacher - Online Exams
+ *     description: Online exam read-only endpoints
+ *   - name: Teacher - Questions & Options
+ *     description: Question and option read-only endpoints
+ *   - name: Teacher - Student Exams
+ *     description: Student exam attempts read-only endpoints
+ *   - name: Teacher - Student Answers
+ *     description: Student answers read-only endpoints
+ *   - name: Teacher - Assignments
+ *     description: Assignment read-only endpoints
+ *   - name: Teacher - Assignment Submissions
+ *     description: Assignment submission read-only endpoints
+ *   - name: Teacher - Videos & Playlists
+ *     description: Video and playlist read-only endpoints
+ *   - name: Teacher - Download & Preview
+ *     description: File download and preview endpoints
  */
 
 /* ============================================
-   DASHBOARD & PROFILE & ACTIVITY LOG
+   PROFILE & DASHBOARD & ACTIVITY LOG
    ============================================ */
 
 /**
@@ -14,8 +46,7 @@
  * /api/teacher/profile:
  *   get:
  *     summary: Get teacher profile
- *     description: Get current teacher profile information
- *     tags: [Teacher]
+ *     tags: [Teacher - Profile & Dashboard]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -27,8 +58,7 @@
  * /api/teacher/dashboard:
  *   get:
  *     summary: Get teacher dashboard
- *     description: Get comprehensive dashboard with all statistics
- *     tags: [Teacher]
+ *     tags: [Teacher - Profile & Dashboard]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -41,21 +71,18 @@
  *   get:
  *     summary: Get activity log
  *     description: Get activity logs for assistants only
- *     tags: [Teacher]
+ *     tags: [Teacher - Profile & Dashboard]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: query
  *         name: entity_type
  *         schema: { type: string }
- *         description: Filter by entity type
  *       - in: query
  *         name: date
  *         schema: { type: string, format: date }
- *         description: Filter by date
  *       - in: query
  *         name: page
  *         schema: { type: integer, default: 1 }
- *         description: Page number
  *     responses:
  *       200:
  *         description: Activity logs retrieved successfully
@@ -64,10 +91,16 @@
 /**
  * @swagger
  * /api/teacher/profile-image:
+ *   get:
+ *     summary: Get teacher profile image
+ *     tags: [Teacher - Profile & Dashboard]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     responses:
+ *       200:
+ *         description: Profile image retrieved successfully
  *   put:
  *     summary: Update teacher profile image
- *     description: Upload new profile image
- *     tags: [Teacher]
+ *     tags: [Teacher - Profile & Dashboard]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     requestBody:
  *       required: true
@@ -79,26 +112,16 @@
  *               image:
  *                 type: string
  *                 format: binary
- *                 description: Profile image file (jpg, png, webp)
  *     responses:
  *       200:
  *         description: Profile image updated successfully
  *   delete:
  *     summary: Delete teacher profile image
- *     description: Remove profile image
- *     tags: [Teacher]
+ *     tags: [Teacher - Profile & Dashboard]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
  *         description: Profile image deleted successfully
- *   get:
- *     summary: Get teacher profile image
- *     description: Get current profile image
- *     tags: [Teacher]
- *     security: [{ ApiAuth: [], ClientToken: [] }]
- *     responses:
- *       200:
- *         description: Profile image retrieved successfully
  */
 
 /**
@@ -106,8 +129,7 @@
  * /api/teacher/password:
  *   put:
  *     summary: Update teacher password
- *     description: Change current teacher password
- *     tags: [Teacher]
+ *     tags: [Teacher - Profile & Dashboard]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     requestBody:
  *       required: true
@@ -117,22 +139,139 @@
  *             type: object
  *             required: [oldPassword, password, confirmPassword]
  *             properties:
- *               oldPassword:
- *                 type: string
- *                 description: Current password
- *               password:
- *                 type: string
- *                 description: New password
- *               confirmPassword:
- *                 type: string
- *                 description: Confirm new password
+ *               oldPassword: { type: string }
+ *               password: { type: string }
+ *               confirmPassword: { type: string }
  *     responses:
  *       200:
  *         description: Password updated successfully
  */
 
 /* ============================================
-   GRADES MANAGEMENT
+   DOWNLOAD & PREVIEW
+   ============================================ */
+
+/**
+ * @swagger
+ * /api/teacher/assignments/{assignmentId}/download:
+ *   get:
+ *     summary: Download assignment file
+ *     tags: [Teacher - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File downloaded successfully
+ */
+
+/**
+ * @swagger
+ * /api/teacher/assignments/{assignmentId}/preview:
+ *   get:
+ *     summary: Preview assignment file
+ *     tags: [Teacher - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/teacher/videos/{videoId}/download:
+ *   get:
+ *     summary: Download video file
+ *     tags: [Teacher - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File downloaded successfully
+ */
+
+/**
+ * @swagger
+ * /api/teacher/videos/{videoId}/preview:
+ *   get:
+ *     summary: Preview video file
+ *     tags: [Teacher - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/teacher/questions/{questionId}/download:
+ *   get:
+ *     summary: Download question file
+ *     tags: [Teacher - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File downloaded successfully
+ */
+
+/**
+ * @swagger
+ * /api/teacher/questions/{questionId}/preview:
+ *   get:
+ *     summary: Preview question file
+ *     tags: [Teacher - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: questionId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/**
+ * @swagger
+ * /api/teacher/student-answers/{answerId}/preview:
+ *   get:
+ *     summary: Preview student answer file
+ *     tags: [Teacher - Download & Preview]
+ *     security: [{ ApiAuth: [], ClientToken: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: answerId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: File previewed successfully
+ */
+
+/* ============================================
+   GRADES
    ============================================ */
 
 /**
@@ -140,12 +279,11 @@
  * /api/teacher/grades:
  *   get:
  *     summary: Get all grades
- *     description: Get list of all grades
- *     tags: [Teacher]
+ *     tags: [Teacher - Grades]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: Grades list retrieved successfully
+ *         description: Grades retrieved successfully
  */
 
 /**
@@ -153,12 +291,11 @@
  * /api/teacher/grades/groups-count:
  *   get:
  *     summary: Get grades with groups count
- *     description: Get all grades with number of groups
- *     tags: [Teacher]
+ *     tags: [Teacher - Grades]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: Grades with groups count retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -166,12 +303,11 @@
  * /api/teacher/grades/students-count:
  *   get:
  *     summary: Get grades with students count
- *     description: Get all grades with number of students
- *     tags: [Teacher]
+ *     tags: [Teacher - Grades]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: Grades with students count retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -179,12 +315,11 @@
  * /api/teacher/grades/stats:
  *   get:
  *     summary: Get all grades stats
- *     description: Get statistics for all grades
- *     tags: [Teacher]
+ *     tags: [Teacher - Grades]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: All grades stats retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -192,18 +327,16 @@
  * /api/teacher/grades/{id}:
  *   get:
  *     summary: Get grade by ID
- *     description: Get specific grade details
- *     tags: [Teacher]
+ *     tags: [Teacher - Grades]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *         description: Grade ID
  *     responses:
  *       200:
- *         description: Grade data retrieved successfully
+ *         description: Grade retrieved successfully
  */
 
 /**
@@ -211,8 +344,7 @@
  * /api/teacher/grades/{id}/stats:
  *   get:
  *     summary: Get grade stats
- *     description: Get statistics for specific grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Grades]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -221,11 +353,11 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Grade stats retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /* ============================================
-   GROUPS MANAGEMENT
+   GROUPS
    ============================================ */
 
 /**
@@ -233,12 +365,11 @@
  * /api/teacher/groups:
  *   get:
  *     summary: Get all groups
- *     description: Get list of all groups
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: Groups list retrieved successfully
+ *         description: Groups retrieved successfully
  */
 
 /**
@@ -246,12 +377,11 @@
  * /api/teacher/groups/with-grade-name:
  *   get:
  *     summary: Get groups with grade name
- *     description: Get all groups with their grade names
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: Groups with grade name retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -259,12 +389,11 @@
  * /api/teacher/groups/students-count:
  *   get:
  *     summary: Get groups with students count
- *     description: Get all groups with number of students
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: Groups with students count retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -272,12 +401,11 @@
  * /api/teacher/groups/stats:
  *   get:
  *     summary: Get all groups stats
- *     description: Get statistics for all groups
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: All groups stats retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -285,18 +413,16 @@
  * /api/teacher/groups/{id}/full-stats:
  *   get:
  *     summary: Get group full stats
- *     description: Get comprehensive statistics for a group
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema: { type: integer }
- *         description: Group ID
  *     responses:
  *       200:
- *         description: Group full stats retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -304,8 +430,7 @@
  * /api/teacher/groups/grade/{gradeId}:
  *   get:
  *     summary: Get groups by grade
- *     description: Get all groups in specific grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -314,7 +439,7 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Groups list retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /**
@@ -322,7 +447,7 @@
  * /api/teacher/groups/{id}:
  *   get:
  *     summary: Get group by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -331,7 +456,7 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Group data retrieved successfully
+ *         description: Group retrieved successfully
  */
 
 /**
@@ -339,7 +464,7 @@
  * /api/teacher/groups/{id}/stats:
  *   get:
  *     summary: Get group stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Groups]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -348,11 +473,11 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Group stats retrieved successfully
+ *         description: Retrieved successfully
  */
 
 /* ============================================
-   STUDENTS MANAGEMENT
+   STUDENTS
    ============================================ */
 
 /**
@@ -360,28 +485,24 @@
  * /api/teacher/students:
  *   get:
  *     summary: Get all students
- *     description: Get students list with filters
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: query
  *         name: search
  *         schema: { type: string }
- *         description: Search by name, barcode or phone
  *       - in: query
  *         name: grade_id
  *         schema: { type: integer }
- *         description: Filter by grade
  *       - in: query
  *         name: group_id
  *         schema: { type: integer }
- *         description: Filter by group
  *       - in: query
  *         name: page
  *         schema: { type: integer, default: 1 }
  *     responses:
  *       200:
- *         description: Students list retrieved successfully
+ *         description: Students retrieved successfully
  */
 
 /**
@@ -389,7 +510,7 @@
  * /api/teacher/students/search/barcode:
  *   get:
  *     summary: Search student by barcode
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: query
@@ -406,7 +527,7 @@
  * /api/teacher/students/search/phone:
  *   get:
  *     summary: Search student by phone
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: query
@@ -423,7 +544,7 @@
  * /api/teacher/students/grade/{gradeId}:
  *   get:
  *     summary: Get students by grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -432,7 +553,7 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Students list retrieved successfully
+ *         description: Students retrieved successfully
  */
 
 /**
@@ -440,7 +561,7 @@
  * /api/teacher/students/group/{groupId}:
  *   get:
  *     summary: Get students by group
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -449,7 +570,7 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Students list retrieved successfully
+ *         description: Students retrieved successfully
  */
 
 /**
@@ -457,8 +578,7 @@
  * /api/teacher/students/{studentId}/profile:
  *   get:
  *     summary: Get student full profile
- *     description: Get comprehensive student profile
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -467,7 +587,7 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Student profile retrieved successfully
+ *         description: Profile retrieved successfully
  */
 
 /**
@@ -475,7 +595,7 @@
  * /api/teacher/students/{studentId}/stats:
  *   get:
  *     summary: Get student quick stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -484,7 +604,7 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Student stats retrieved successfully
+ *         description: Stats retrieved successfully
  */
 
 /**
@@ -492,7 +612,7 @@
  * /api/teacher/students/{studentId}/attendance:
  *   get:
  *     summary: Get student attendance history
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -509,7 +629,7 @@
  * /api/teacher/students/{studentId}/attendance/monthly:
  *   get:
  *     summary: Get student monthly attendance stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -526,7 +646,7 @@
  * /api/teacher/students/{studentId}/payments:
  *   get:
  *     summary: Get student payment history
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -543,7 +663,7 @@
  * /api/teacher/students/{studentId}/payments/balance:
  *   get:
  *     summary: Get student remaining balance
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -560,7 +680,7 @@
  * /api/teacher/students/{studentId}/exams/paper:
  *   get:
  *     summary: Get student paper exams
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -577,7 +697,7 @@
  * /api/teacher/students/{studentId}/exams/results:
  *   get:
  *     summary: Get student exam results
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -594,7 +714,7 @@
  * /api/teacher/students/{studentId}/exams/online/history:
  *   get:
  *     summary: Get student online exams history
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -611,7 +731,7 @@
  * /api/teacher/students/{studentId}/assignments:
  *   get:
  *     summary: Get student assignments
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -628,7 +748,7 @@
  * /api/teacher/students/{studentId}/submissions:
  *   get:
  *     summary: Get student submissions
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -645,7 +765,7 @@
  * /api/teacher/students/{studentId}:
  *   get:
  *     summary: Get student by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Students]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -654,11 +774,11 @@
  *         schema: { type: integer }
  *     responses:
  *       200:
- *         description: Student data retrieved successfully
+ *         description: Student retrieved successfully
  */
 
 /* ============================================
-   ATTENDANCE MANAGEMENT
+   ATTENDANCE
    ============================================ */
 
 /**
@@ -666,7 +786,7 @@
  * /api/teacher/attendance/dashboard:
  *   get:
  *     summary: Get attendance dashboard
- *     tags: [Teacher]
+ *     tags: [Teacher - Attendance]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -678,7 +798,7 @@
  * /api/teacher/attendance/overall-stats:
  *   get:
  *     summary: Get overall attendance stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Attendance]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -690,11 +810,11 @@
  * /api/teacher/attendance/consecutive-absences:
  *   get:
  *     summary: Get students with 3 consecutive absences
- *     tags: [Teacher]
+ *     tags: [Teacher - Attendance]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
- *         description: Students list retrieved successfully
+ *         description: Students retrieved successfully
  */
 
 /**
@@ -702,7 +822,7 @@
  * /api/teacher/attendance/grade/{gradeId}/stats:
  *   get:
  *     summary: Get grade attendance stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Attendance]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -719,7 +839,7 @@
  * /api/teacher/attendance/group/{groupId}/date/{date}:
  *   get:
  *     summary: Get attendance by group and date
- *     tags: [Teacher]
+ *     tags: [Teacher - Attendance]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -740,7 +860,7 @@
  * /api/teacher/attendance/group/{groupId}/month/{month}:
  *   get:
  *     summary: Get attendance by group and month
- *     tags: [Teacher]
+ *     tags: [Teacher - Attendance]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -761,7 +881,7 @@
  * /api/teacher/attendance/summary/group/{groupId}/date/{date}:
  *   get:
  *     summary: Get attendance summary
- *     tags: [Teacher]
+ *     tags: [Teacher - Attendance]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -778,7 +898,7 @@
  */
 
 /* ============================================
-   PAYMENTS MANAGEMENT
+   PAYMENTS
    ============================================ */
 
 /**
@@ -786,8 +906,7 @@
  * /api/teacher/payments:
  *   get:
  *     summary: Get all payments
- *     description: Get payments with filters
- *     tags: [Teacher]
+ *     tags: [Teacher - Payments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: query
@@ -812,7 +931,7 @@
  * /api/teacher/payments/collections:
  *   get:
  *     summary: Get monthly collections
- *     tags: [Teacher]
+ *     tags: [Teacher - Payments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -824,7 +943,7 @@
  * /api/teacher/payments/unpaid:
  *   get:
  *     summary: Get unpaid students
- *     tags: [Teacher]
+ *     tags: [Teacher - Payments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -836,7 +955,7 @@
  * /api/teacher/payments/overall:
  *   get:
  *     summary: Get overall payment stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Payments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -848,7 +967,7 @@
  * /api/teacher/payments/students-status:
  *   get:
  *     summary: Get all students payment status
- *     tags: [Teacher]
+ *     tags: [Teacher - Payments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -860,7 +979,7 @@
  * /api/teacher/payments/grade/{gradeId}/stats:
  *   get:
  *     summary: Get grade payment stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Payments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -877,7 +996,7 @@
  * /api/teacher/payments/group/{groupId}/stats:
  *   get:
  *     summary: Get group payment stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Payments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -890,7 +1009,7 @@
  */
 
 /* ============================================
-   SUBSCRIPTIONS MANAGEMENT
+   SUBSCRIPTIONS
    ============================================ */
 
 /**
@@ -898,7 +1017,7 @@
  * /api/teacher/subscriptions/overall:
  *   get:
  *     summary: Get overall subscription stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Subscriptions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -910,7 +1029,7 @@
  * /api/teacher/subscriptions/without-current:
  *   get:
  *     summary: Get students without subscription
- *     tags: [Teacher]
+ *     tags: [Teacher - Subscriptions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -922,7 +1041,7 @@
  * /api/teacher/subscriptions/month/{month}:
  *   get:
  *     summary: Get subscriptions by month
- *     tags: [Teacher]
+ *     tags: [Teacher - Subscriptions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -939,7 +1058,7 @@
  * /api/teacher/subscriptions/grade/{gradeId}/stats:
  *   get:
  *     summary: Get grade subscription stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Subscriptions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -956,7 +1075,7 @@
  * /api/teacher/subscriptions/group/{groupId}/stats:
  *   get:
  *     summary: Get group subscription stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Subscriptions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -973,7 +1092,7 @@
  * /api/teacher/subscriptions/student/{studentId}:
  *   get:
  *     summary: Get student subscriptions
- *     tags: [Teacher]
+ *     tags: [Teacher - Subscriptions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -986,7 +1105,7 @@
  */
 
 /* ============================================
-   EXAMS MANAGEMENT (Paper)
+   PAPER EXAMS
    ============================================ */
 
 /**
@@ -994,7 +1113,7 @@
  * /api/teacher/exams:
  *   get:
  *     summary: Get all paper exams
- *     tags: [Teacher]
+ *     tags: [Teacher - Paper Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -1006,7 +1125,7 @@
  * /api/teacher/exams/grade/{gradeId}:
  *   get:
  *     summary: Get exams by grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Paper Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1023,7 +1142,7 @@
  * /api/teacher/exams/group/{groupId}:
  *   get:
  *     summary: Get exams by group
- *     tags: [Teacher]
+ *     tags: [Teacher - Paper Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1040,7 +1159,7 @@
  * /api/teacher/exams/{id}:
  *   get:
  *     summary: Get exam by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Paper Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1057,7 +1176,7 @@
  * /api/teacher/exams/{id}/stats:
  *   get:
  *     summary: Get exam stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Paper Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1070,7 +1189,7 @@
  */
 
 /* ============================================
-   EXAM RESULTS MANAGEMENT
+   EXAM RESULTS
    ============================================ */
 
 /**
@@ -1078,7 +1197,7 @@
  * /api/teacher/exam-results/grade/{gradeId}/stats:
  *   get:
  *     summary: Get grade exam results stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Exam Results]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1095,7 +1214,7 @@
  * /api/teacher/exam-results/group/{groupId}/stats:
  *   get:
  *     summary: Get group exam results stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Exam Results]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1112,7 +1231,7 @@
  * /api/teacher/exam-results/exam/{examId}:
  *   get:
  *     summary: Get exam results
- *     tags: [Teacher]
+ *     tags: [Teacher - Exam Results]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1129,7 +1248,7 @@
  * /api/teacher/exam-results/exam/{examId}/stats:
  *   get:
  *     summary: Get exam result stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Exam Results]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1142,7 +1261,7 @@
  */
 
 /* ============================================
-   ONLINE EXAMS MANAGEMENT
+   ONLINE EXAMS
    ============================================ */
 
 /**
@@ -1150,7 +1269,7 @@
  * /api/teacher/online-exams:
  *   get:
  *     summary: Get all online exams
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -1162,7 +1281,7 @@
  * /api/teacher/online-exams/available:
  *   get:
  *     summary: Get available online exams
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -1174,7 +1293,7 @@
  * /api/teacher/online-exams/expired:
  *   get:
  *     summary: Get expired online exams
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -1186,7 +1305,7 @@
  * /api/teacher/online-exams/grade/{gradeId}:
  *   get:
  *     summary: Get online exams by grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1203,7 +1322,7 @@
  * /api/teacher/online-exams/group/{groupId}:
  *   get:
  *     summary: Get online exams by group
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1220,7 +1339,7 @@
  * /api/teacher/online-exams/stats/grade/{gradeId}:
  *   get:
  *     summary: Get grade online exam stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1237,7 +1356,7 @@
  * /api/teacher/online-exams/stats/{examId}:
  *   get:
  *     summary: Get online exam stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1254,7 +1373,7 @@
  * /api/teacher/online-exams/{examId}:
  *   get:
  *     summary: Get online exam by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Online Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1267,7 +1386,7 @@
  */
 
 /* ============================================
-   QUESTIONS & OPTIONS MANAGEMENT
+   QUESTIONS & OPTIONS
    ============================================ */
 
 /**
@@ -1275,7 +1394,7 @@
  * /api/teacher/questions/exam/{examId}:
  *   get:
  *     summary: Get questions by exam
- *     tags: [Teacher]
+ *     tags: [Teacher - Questions & Options]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1292,7 +1411,7 @@
  * /api/teacher/questions/{questionId}:
  *   get:
  *     summary: Get question by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Questions & Options]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1309,7 +1428,7 @@
  * /api/teacher/options/question/{questionId}:
  *   get:
  *     summary: Get options by question
- *     tags: [Teacher]
+ *     tags: [Teacher - Questions & Options]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1326,7 +1445,7 @@
  * /api/teacher/options/{optionId}:
  *   get:
  *     summary: Get option by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Questions & Options]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1339,7 +1458,7 @@
  */
 
 /* ============================================
-   STUDENT EXAMS MANAGEMENT
+   STUDENT EXAMS
    ============================================ */
 
 /**
@@ -1347,7 +1466,7 @@
  * /api/teacher/student-exams/exam/{examId}:
  *   get:
  *     summary: Get student exams by exam
- *     tags: [Teacher]
+ *     tags: [Teacher - Student Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1364,7 +1483,7 @@
  * /api/teacher/student-exams/exam/{examId}/stats:
  *   get:
  *     summary: Get exam attempt stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Student Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1381,7 +1500,7 @@
  * /api/teacher/student-exams/grade/{gradeId}/stats:
  *   get:
  *     summary: Get grade exam attempts stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Student Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1398,7 +1517,7 @@
  * /api/teacher/student-exams/group/{groupId}/stats:
  *   get:
  *     summary: Get group exam attempts stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Student Exams]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1411,7 +1530,7 @@
  */
 
 /* ============================================
-   STUDENT ANSWERS STATISTICS
+   STUDENT ANSWERS
    ============================================ */
 
 /**
@@ -1419,7 +1538,7 @@
  * /api/teacher/student-answers/question/{questionId}/stats:
  *   get:
  *     summary: Get question answer stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Student Answers]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1436,7 +1555,7 @@
  * /api/teacher/student-answers/question/{questionId}/options:
  *   get:
  *     summary: Get most selected options
- *     tags: [Teacher]
+ *     tags: [Teacher - Student Answers]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1449,7 +1568,7 @@
  */
 
 /* ============================================
-   ASSIGNMENTS MANAGEMENT
+   ASSIGNMENTS
    ============================================ */
 
 /**
@@ -1457,7 +1576,7 @@
  * /api/teacher/assignments:
  *   get:
  *     summary: Get all assignments
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -1469,7 +1588,7 @@
  * /api/teacher/assignments/grade/{gradeId}:
  *   get:
  *     summary: Get assignments by grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1486,7 +1605,7 @@
  * /api/teacher/assignments/group/{groupId}:
  *   get:
  *     summary: Get assignments by group
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1503,7 +1622,7 @@
  * /api/teacher/assignments/{assignmentId}:
  *   get:
  *     summary: Get assignment by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignments]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1516,7 +1635,7 @@
  */
 
 /* ============================================
-   ASSIGNMENT SUBMISSIONS MANAGEMENT
+   ASSIGNMENT SUBMISSIONS
    ============================================ */
 
 /**
@@ -1524,7 +1643,7 @@
  * /api/teacher/assignment-submissions/stats/grade/{gradeId}:
  *   get:
  *     summary: Get grade assignment submissions stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignment Submissions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1541,7 +1660,7 @@
  * /api/teacher/assignment-submissions/stats/group/{groupId}:
  *   get:
  *     summary: Get group assignment submissions stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignment Submissions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1558,7 +1677,7 @@
  * /api/teacher/assignment-submissions/assignment/{assignmentId}:
  *   get:
  *     summary: Get submissions by assignment
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignment Submissions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1575,7 +1694,7 @@
  * /api/teacher/assignment-submissions/assignment/{assignmentId}/student/{studentId}:
  *   get:
  *     summary: Get student submission
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignment Submissions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1596,7 +1715,7 @@
  * /api/teacher/assignment-submissions/stats/assignment/{assignmentId}:
  *   get:
  *     summary: Get assignment submission stats
- *     tags: [Teacher]
+ *     tags: [Teacher - Assignment Submissions]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1609,7 +1728,7 @@
  */
 
 /* ============================================
-   VIDEOS & PLAYLISTS MANAGEMENT
+   VIDEOS & PLAYLISTS
    ============================================ */
 
 /**
@@ -1617,7 +1736,7 @@
  * /api/teacher/videos:
  *   get:
  *     summary: Get all videos
- *     tags: [Teacher]
+ *     tags: [Teacher - Videos & Playlists]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -1629,7 +1748,7 @@
  * /api/teacher/videos/grade/{gradeId}:
  *   get:
  *     summary: Get videos by grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Videos & Playlists]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1646,7 +1765,7 @@
  * /api/teacher/videos/{videoId}:
  *   get:
  *     summary: Get video by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Videos & Playlists]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1663,7 +1782,7 @@
  * /api/teacher/playlists:
  *   get:
  *     summary: Get all playlists
- *     tags: [Teacher]
+ *     tags: [Teacher - Videos & Playlists]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     responses:
  *       200:
@@ -1675,7 +1794,7 @@
  * /api/teacher/playlists/grade/{gradeId}:
  *   get:
  *     summary: Get playlists by grade
- *     tags: [Teacher]
+ *     tags: [Teacher - Videos & Playlists]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1692,7 +1811,7 @@
  * /api/teacher/playlists/{playlistId}:
  *   get:
  *     summary: Get playlist by ID
- *     tags: [Teacher]
+ *     tags: [Teacher - Videos & Playlists]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
@@ -1709,7 +1828,7 @@
  * /api/teacher/playlist-videos/playlist/{playlistId}:
  *   get:
  *     summary: Get playlist videos
- *     tags: [Teacher]
+ *     tags: [Teacher - Videos & Playlists]
  *     security: [{ ApiAuth: [], ClientToken: [] }]
  *     parameters:
  *       - in: path
